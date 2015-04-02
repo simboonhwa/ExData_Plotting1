@@ -9,16 +9,17 @@ names(power) <- c("Date","Time","active_power","reactive_power",
 		"Sub_metering_3")
 
 #X11()
-hist(power$active_power,main="Global Active Power",xlab="Global Active Power (kilowatts)",ylab="Frequency",col="red")
+#hist(power$active_power,main="Global Active Power",xlab="Global Active Power (kilowatts)",ylab="Frequency",col="red")
 #dev.copy(png,filename="plot1.png")
 
 library(lubridate)
 library(ggplot2)
 #strptime(power$Date, format="%y-%m-%d")
 power$Date <- wday(power$Date,label=T) 
-qplot(paste(Date,Time), active_power, data=power, ylab="Global Active Power (kilowatts)", geom="line")
+power1 <- power[1:5000,]
+#qplot(paste(Date,Time), active_power, data=power1, ylab="Global Active Power (kilowatts)", geom="line")
 
-ggplot(power, aes(paste(Date,Time)),Sub_metering_1) + geom_density() + 
+ggplot(power1, aes(x=paste(Date,Time)), y=Sub_metering_1) + geom_line() + 
 	color="grey0" + ylab("Energg Sub Metering")+ 
 	guide_legend(title="Sub_metering_1")
 qplot(paste(Date,Time), Sub_metering_1, data=power, ylab="Energy Sub Metering",
