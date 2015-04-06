@@ -8,20 +8,25 @@ names(power) <- c("Date","Time","active_power","reactive_power",
 		"Voltage","intensity","Sub_metering_1","Sub_metering_2",
 		"Sub_metering_3")
 
+power$Date <- strptime(paste(power$Date,power$Time), format="%d/%m/%Y %H:%M:%S")
+power <- subset(power, select=(-2))
+power1 <- melt(power[,c(1,6:8)], id=c("Date"))
 #X11()
 #hist(power$active_power,main="Global Active Power",xlab="Global Active Power (kilowatts)",ylab="Frequency",col="red")
 #dev.copy(png,filename="plot1.png")
 
 library(lubridate)
 library(ggplot2)
-#strptime(power$Date, format="%y-%m-%d")
-power$Date <- wday(power$Date,label=T) 
-power1 <- power[1:5000,]
-#qplot(paste(Date,Time), active_power, data=power1, ylab="Global Active Power (kilowatts)", geom="line")
-
-ggplot(power1, aes(x=paste(Date,Time)), y=Sub_metering_1) + geom_line() + 
-	color="grey0" + ylab("Energg Sub Metering")+ 
-	guide_legend(title="Sub_metering_1")
+library(scales)
+ggplot() + geom_line(data=power, aes(x=Date, y=Sub_metering_1),color="black") + geom_point() + 
+ggplot() +  scale_x_datetime(labels = date_format("%A")) +
+	#geom_line(data=power1, aes(x=Date,y=value,color=variable)) +
+	geom_line(data=power, aes(x=Date, y=Sub_metering_1),color="black") + 
+	geom_line(data=power, aes(x=Date, y=Sub_metering_2),color="red") + 
+	geom_line(data=power, aes(x=Date, y=Sub_metering_3),color="blue") + 
+	ylab("Energy Sub Metering")+ 
+	#guide_legend(title="Sub_metering_1") +
+	theme(legend.position=c(1,1),legend.justification=c(1,1))
 qplot(paste(Date,Time), Sub_metering_1, data=power, ylab="Energy Sub Metering",
  geom="line", color="grey0")#,label="Sub_metering_1")
 qplot(paste(Date,Time), Sub_metering_2, data=power, ylab="Energy Sub Metering",
