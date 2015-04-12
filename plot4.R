@@ -4,7 +4,7 @@ source("plot3.R")
 library("gridExtra")
 
 power = plotread()
-
+x11()
 #p1 = plot2(FALSE)
 p1 = ggplot() +  scale_x_datetime(labels = date_format("%A")) + 
 	geom_line(data=power, aes(x=Date, y=active_power),color="black") + 
@@ -30,6 +30,6 @@ p4 = ggplot() +  scale_x_datetime(labels = date_format("%A")) +
 
 grid.arrange(p1,p2,p3,p4)	
 
-ggsave("plot4.png")
-
+dev.copy(png,filename="plot4.png")
+dev.off()
 }
